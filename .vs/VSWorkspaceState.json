@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\function"
+    "\\src"
   ],
-  "SelectedNode": "\\CHANGELOG",
+  "SelectedNode": "\\src\\Makefile",
   "PreviewInSolutionExplorer": false
 }
