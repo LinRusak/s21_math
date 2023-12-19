@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror -std=c11
 TEST_LIB = s21_math
 TESTFILE = test
 GCOV_FLAG = -fprofile-arcs -ftest-coverage
-LIBS_FOR_CHECK_PCKG =
+LIBS_FOR_CHECK_PCKG = -lcheck -lsubunit -lm -lpthread 
 D_OS =
 OS = $(shell uname -s)
 ifeq ($(OS), Linux)
@@ -19,14 +19,24 @@ all: clean s21_math.a gcov_report
 
 a: clean linter cppcheck s21_math.a gcov_report
 
+clang:
+	cp ../materials/linters/.clang-format .
+
+check:
+	clang-format -n *.c *.h
+
+format:
+	clang-format -i *.c *.h
+
 test: s21_math.a
 	@echo "=========== test ==========="
-	$(CC) $(FLAGS) -o a.out test.c $(TEST_LIB).a $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG)
+	$(CC) $(FLAGS) -o a.out my_test.c $(TEST_LIB).a $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG)
 	./a.out
 
 clean:
 	rm -f *.a *.o *.so *.out $(TESTFILE) *.info *.gcno *.gcda
 	rm -rf report
+	rm -rf .clang-format
 
 gcov_report:
 	$(CC) $(D_OS) -c $(FLAGS) $(GCOV_FLAG) $(TEST_LIB).c -o $(TEST_LIB).a

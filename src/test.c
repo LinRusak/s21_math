@@ -350,8 +350,8 @@ START_TEST(exp_test2) {
     str2[999] = snprintf(str2, sizeof(str2), "%.6f", exp((double)_i - x));
     ck_assert_str_eq(str1, str2);
   }
-  test;
 }
+END_TEST;
 
 // -----------------------
 int main(void) {
