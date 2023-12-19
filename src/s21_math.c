@@ -4,28 +4,32 @@
 #include <limits.h>
 #include <stdio.h>
 
-long double s21_pow(double base, double expo) {
-  unsigned int e;
-  long double ret, res;
-  if (base == 0.) {
-    if (expo > 0) {
-      res = 0;
-    } else if (expo == 0.) {
-      res = 1;
-    } else {
-      res = 1. / base;
+long double s21_pow(double a, double x) {
+  if (a < 0 && (int)(x) != x) {
+    return -0. / 0.;
+  }
+  long double a_ = a;
+  long double res = 1;
+  if ((int)x == x) {
+    int deg = s21_fabs(x);
+    while (deg) {
+      if (deg % 2 == 0) {
+        deg /= 2;
+        a_ *= a_;
+      } else {
+        deg--;
+        res *= a_;
+      }
     }
-  } else if (expo == (int)(e = (int)expo)) {
-    ((int)e < 0) ? e = -e, base = 1. / base : 0;
-    ret = 1.;
-    while (1) {
-      if (e & 1) ret *= base;
-      if ((e >>= 1) == 0) break;
-      base *= base;
+    if (x < 0) {
+      res = 1 / res;
     }
-    res = ret;
   } else {
-    res = s21_exp(s21_log(base) * expo);
+    if (a_ == 0) {
+      res = 0;
+    } else {
+      res = s21_exp(x * s21_log(a));
+    }
   }
   return res;
 }
@@ -45,7 +49,8 @@ long double s21_sin(double x) {
 }
 
 long double s21_sqrt(double x) {
-  if (x != x || x < 0) return S21_NAN;
+  if (x != x) return S21_NAN;
+  if (x < 0) return S21_NAN * -1;
   double sqrt, temp;
   sqrt = x / 2;
   temp = 0;
@@ -108,7 +113,7 @@ long double s21_log(double num) {
       x *= a;
     }
   } else {
-    y = (num == 0) / 0.;
+    y = S21_INF * -1;
   }
   return ans + y;
 }
@@ -162,13 +167,24 @@ long double s21_cos(double x) {
 long double s21_fabs(double x) { return (long double)(x < 0) ? -x : x; }
 
 long double s21_ceil(double x) {
-  if (x >= LLONG_MAX || x <= LLONG_MIN || x != x) {
-    return (long double)x;
+  long double result;
+  long long temp = x;
+  if (x == S21_INF) {
+    result = S21_INF;
+  } else if (x == S21_INF * -1) {
+    result = S21_INF * -1;
+  } else if (x != x) {
+    result = S21_NAN;
+  } else {
+    result = temp;
+    if (x < 0 && x > -1) {
+      result *= -1;
+    }
+    if (x != temp && x > 0) {
+      result += 1;
+    }
   }
-  long double t = (long long)x;
-  t += (t < x);
-  if ((x < 0) && (t == 0)) t = -1 / S21_INF;
-  return t;
+  return result;
 }
 
 int s21_abs(int a) { return a > 0 ? a : -a; }

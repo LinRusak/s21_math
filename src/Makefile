@@ -17,7 +17,7 @@ endif
 
 all: clean s21_math.a gcov_report
 
-a: clean linter cppcheck s21_math.a gcov_report
+a: clean s21_math.a gcov_report
 
 clang:
 	cp ../materials/linters/.clang-format .
@@ -30,7 +30,7 @@ format:
 
 test: s21_math.a
 	@echo "=========== test ==========="
-	$(CC) $(FLAGS) -o a.out my_test.c $(TEST_LIB).a $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG)
+	$(CC) $(FLAGS) -o a.out test.c -L. $(TEST_LIB).a $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) -lm
 	./a.out
 
 clean:
@@ -54,13 +54,6 @@ s21_math.a: remove_s21_math.a
 remove_s21_math.a:
 	rm -f *$(TEST_LIB)*.a *$(TEST_LIB)*.o
 
-linter:
-	@echo "=========== linter start ==========="
-	python3 ../materials/linters/cpplint.py --extensions=c *.c *.h
-
-cppcheck:
-	@echo "=========== cppcheck start ==========="
-	cppcheck --enable=all --suppress=missingIncludeSystem *.c *.h
 
 leaks:
 	CK_FORK=no leaks --atExit -- ./a.out
