@@ -6,6 +6,10 @@ long double s21_exp(double x) {
   long double ex = 1;
   long double i = 1;
   int flag = 0;
+  
+  if(x <= S21_LLONG_MIN || x >= S21_LLONG_MAX){
+    return -S21_NAN;
+  }
 
   if (x < 0) {
     x *= -1;

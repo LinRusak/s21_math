@@ -31,6 +31,8 @@ long double s21_pow(double base, double exp){
   }
   else{
     res = s21_exp(exp * s21_log(base));
+
+
   }
   
   return res;

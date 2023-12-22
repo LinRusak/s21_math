@@ -35,6 +35,9 @@ long double s21_pow(double a, double x) {
 }
 
 long double s21_sin(double x) {
+  if(x != x || x >= S21_LLONG_MAX || x <= S21_LLONG_MIN){
+    return x;
+  }
   x = s21_fmod(x, 2.0 * S21_M_PI);
   long double sum = 0.0;
   for (int i = 0; i <= 20; i++) {
@@ -154,6 +157,10 @@ long double s21_exp(double x) {
 }
 
 long double s21_cos(double x) {
+  if(x != x || x >= S21_LLONG_MAX || x <= S21_LLONG_MIN){
+    return -S21_NAN;
+  }
+  
   x = s21_fmod(x, 2.0 * S21_M_PI);
   long double t_s = 0, last = 1;
   for (int k = 1; s21_fabs(last) > 1e-12; ++k) {

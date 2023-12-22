@@ -36,6 +36,8 @@ long double s21_pow(double base, double exp){
   }
   else{
     res = s21_exp(exp * s21_log(base));
+
+
   }
   
   return res;
@@ -162,10 +164,15 @@ long double s21_exp(double x) {
   long double temp = 1;
   long double i = 1;
   int flag = 0;
+  if(x <= S21_LLONG_MIN || x >= S21_LLONG_MAX){
+    return -S21_NAN;
+  }
+
   if (x < 0) {
     x *= -1;
     flag = 1;
   }
+
   while (s21_fabs(res) > 1e-10) {
     res *= x / i;
     i += 1;
@@ -189,14 +196,19 @@ long double s21_exp(double x) {
 }
 
 long double s21_cos(double x) {
-  x = s21_fmod(x, 2.0 * S21_M_PI);
-  long double t_s = 0, last = 1;
-  for (int k = 1; s21_fabs(last) > 1e-12; ++k) {
-    t_s += last;
-    last *= -x * x / (2.0 * k - 1.0) / (2.0 * k);
+  if(x != x || x >= S21_LLONG_MAX || x <= S21_LLONG_MIN){
+    return -S21_NAN;
   }
-  return t_s;
+  x = s21_fmod(x, 2.0 * S21_M_PI);
+  
+  long double result = 0, item = 1;
+  for (int n = 1; s21_fabs(item) > 1e-11; n++) {
+    result += item;
+    item *= -x * x / (2.0 * n - 1.0) / (2.0 * n);
+  }
+  return result;
 }
+
 long double s21_fabs(double x){
     return (long double)(x < 0) ? -x : x;
 }
@@ -246,4 +258,7 @@ long double s21_asin(double a) {
   return sum;
 }
 
-long double s21_atan(double x) { return s21_asin(x / s21_sqrt(1.0 + x * x)); }
+long double s21_atan(double x) { 
+  return s21_asin(x / s21_sqrt(1.0 + x * x)); 
+  
+  }
