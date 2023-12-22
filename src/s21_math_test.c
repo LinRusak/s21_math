@@ -3,34 +3,41 @@
 #include <float.h>
 #include <limits.h>
 #include <stdio.h>
+// #include "s21_math.h"
 
-long double s21_pow(double a, double x) {
-  if (a < 0 && (int)(x) != x) {
-    return -0. / 0.;
+
+long double s21_pow(double base, double exp){
+  double long res = 1;
+  if(exp != exp){
+      res = exp;
+  }else if(exp >= S21_LLONG_MAX && s21_fabs(base - 0.0) < EPS_6){
+    res = 0;
+  }else if(exp <= S21_LLONG_MIN && base > 0.0){
+    res = 0;
+  }else if((exp <= S21_LLONG_MIN || exp >= S21_LLONG_MAX) && s21_fabs(base) == 1){
+    res = 1;
   }
-  long double a_ = a;
-  long double res = 1;
-  if ((int)x == x) {
-    int deg = s21_fabs(x);
-    while (deg) {
-      if (deg % 2 == 0) {
-        deg /= 2;
-        a_ *= a_;
-      } else {
-        deg--;
-        res *= a_;
-      }
+  else if((base>= S21_LLONG_MAX || base <= S21_LLONG_MIN) && exp < 0){
+    res = 0;
+  }
+  else if(exp <= S21_LLONG_MIN || base <= S21_LLONG_MIN ){
+    res = S21_INF;
+  }else if(exp >= S21_LLONG_MAX || base >= S21_LLONG_MAX){
+    res = S21_INF;
+  }else if(base == 0){
+    res = 0;
+  }else if((int)exp == exp){
+    for(int deg = s21_fabs(exp); deg >= 1; deg--){
+      res *= base;
     }
-    if (x < 0) {
+    if (exp < 0) {
       res = 1 / res;
     }
-  } else {
-    if (a_ == 0) {
-      res = 0;
-    } else {
-      res = s21_exp(x * s21_log(a));
-    }
   }
+  else{
+    res = s21_exp(exp * s21_log(base));
+  }
+  
   return res;
 }
 
@@ -85,42 +92,70 @@ long double s21_tan(double x) {
   return result;
 }
 
-long double s21_floor(double num) {
+long double s21_floor(double x) {
   long double res;
-  if (num >= S21_LLONG_MAX || num <= S21_LLONG_MIN) {
-    res = (long double)num;
-  } else {
-    long double tmp = (long long)num;
-    res = tmp - (tmp > num);
+
+ if(x != x || x == S21_INF || x == S21_INF * -1){
+        res = x;
+    }
+ else {
+    long double tmp = (long long)x;
+    res = tmp - (tmp > x);
   }
   return res;
 }
 
-long double s21_log(double num) {
-  unsigned ans = 0;
-  double y = 0;
-  if (num > 0) {
-    unsigned d;
-    double z = 0, a = 0, x = num;
-    for (; (x = x / S21_E) > 1; ++ans) {
+
+
+long double s21_log(double x) {
+  int ex_pow = 0;
+  double result = 0;
+  double compare = 0;
+  
+  if (x > 0) {
+    for(; x >= S21_E; x /=S21_E, ex_pow++){
+      continue;
     }
-    x = 1 / (x * S21_E - 1);
-    x = x * 2 + 1;
-    a = x * x;
-    y = 0;
-    for (d = 1, x = x / 2; z = y, y += 1 / (d * x), y - z;) {
-      d += 2;
-      x *= a;
+
+    for(int i = 0; i < 100; i++){
+      compare  = result;
+      result = compare + 2 * ((x - s21_exp(compare))/ (x + s21_exp(compare)));
     }
-  } else {
-    y = S21_INF * -1;
+
+    result += ex_pow;
+
+  }else {
+    result = S21_INF * -1;
   }
-  return ans + y;
+  
+  return result;
 }
 
-long double s21_fmod(double num_1, double num_2) {
-  return (long double)((1 - 2 * (num_1 < 0)) * (s21_fabs(num_1) - s21_fabs(((int)(num_1 / num_2)) * num_2)));
+long double s21_fmod(double x, double y) {
+  long double res;
+  
+  if (y ==  0.0){
+    res = -S21_NAN;
+  }
+
+  else if(x == S21_INF || x == S21_INF * -1){
+    res  = -S21_NAN;
+  }
+
+  else{
+    res = x / y;
+    if(res < 0){
+      res = s21_ceil(res);
+    }
+    else{
+      res = s21_floor(res);
+    }
+
+    res = x - y * res;
+  }
+  return res;
 }
+
 
 long double s21_exp(double x) {
   long double res = 1;
@@ -162,30 +197,31 @@ long double s21_cos(double x) {
   }
   return t_s;
 }
-long double s21_fabs(double x) { return (long double)(x < 0) ? -x : x; }
-
-long double s21_ceil(double x) {
-  long double result;
-  long long temp = x;
-  if (x == S21_INF) {
-    result = S21_INF;
-  } else if (x == S21_INF * -1) {
-    result = S21_INF * -1;
-  } else if (x != x) {
-    result = S21_NAN;
-  } else {
-    result = temp;
-    if (x < 0 && x > -1) {
-      result *= -1;
-    }
-    if (x != temp && x > 0) {
-      result += 1;
-    }
-  }
-  return result;
+long double s21_fabs(double x){
+    return (long double)(x < 0) ? -x : x;
 }
 
-int s21_abs(int a) { return a > 0 ? a : -a; }
+long double s21_ceil(double x) {
+  long double res;
+
+  if(x != x || x >= S21_LLONG_MAX || x <= S21_LLONG_MIN){
+          res = x;
+  }else {
+    res = (long long)x;
+    if(x < 0 && x > -1){
+      res *= -1;
+    }
+    else if (x != (long long)x && x > 0) {
+      res += 1;
+    }
+  }
+  return res;
+}
+
+int s21_abs(int x){
+    return x > 0 ? x : -x; 
+}
+
 
 long double s21_acos(double x) {
   long double res = 0;

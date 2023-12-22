@@ -1,7 +1,7 @@
 .PHONY: all a clean gcov_report s21_math remove_s21_math linter cppcheck leaks
 CC = gcc
 FLAGS = -Wall -Wextra -Werror -std=c11
-TEST_LIB = s21_math
+TEST_LIB = s21_math_test
 TESTFILE = test
 GCOV_FLAG = -fprofile-arcs -ftest-coverage
 LIBS_FOR_CHECK_PCKG = -lcheck -lsubunit -lm -lpthread 
