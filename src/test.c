@@ -1,5 +1,4 @@
 #include <check.h>
-#include <limits.h>
 #include <math.h>
 
 #include "s21_math.h"

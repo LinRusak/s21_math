@@ -3,7 +3,7 @@
 
 long double s21_cos(double x) {
   if(x != x || x >= S21_LLONG_MAX || x <= S21_LLONG_MIN){
-    return -S21_NAN;
+    return (x != x) ? x : -S21_NAN;
   }
   x = s21_fmod(x, 2.0 * S21_M_PI);
   

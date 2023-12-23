@@ -1,4 +1,5 @@
 #include <float.h>
+#include <limits.h>
 
 #ifndef SRC_S21_MATH_H_
 #define SRC_S21_MATH_H_
