@@ -1,4 +1,4 @@
-#include "../s21_math.c"
+#include "../s21_math.h"
 
 
 long double s21_asin(double a) {
@@ -11,9 +11,8 @@ long double s21_asin(double a) {
     sum = tmp;
     long double x = a * a;
     for (double i = 1.0; s21_fabs(tmp) > 1e-10; i += 2){
-      sum += tmp;
-      printf("%Lf\n", tmp);
-      tmp *= x * i / ((i + 1) * (i + 2));
+      tmp *= x * i / (i + 1);
+      sum += tmp / (i + 2);
       
     }
   }

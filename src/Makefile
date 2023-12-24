@@ -1,11 +1,12 @@
 .PHONY: all a clean gcov_report s21_math remove_s21_math linter cppcheck leaks
 CC = gcc
 FLAGS = -Wall -Wextra -Werror -std=c11
-TEST_LIB = s21_math_test
+LIB = s21_math.a
+LIB_DIR = function/*.c
 TESTFILE = test
 GCOV_FLAG = -fprofile-arcs -ftest-coverage
 LIBS_FOR_CHECK_PCKG = -lcheck -lsubunit -lm -lpthread 
-D_OS =
+D_OS = -D __My_Linux__
 OS = $(shell uname -s)
 ifeq ($(OS), Linux)
 	LIBS_FOR_CHECK_PCKG = -lcheck -lsubunit -lm -lpthread -lrt
@@ -17,7 +18,6 @@ endif
 
 all: clean s21_math.a gcov_report
 
-a: clean s21_math.a gcov_report
 
 clang:
 	cp ../materials/linters/.clang-format .
@@ -29,31 +29,27 @@ format:
 	clang-format -i *.c *.h
 
 test: s21_math.a
-	@echo "=========== test ==========="
-	$(CC) $(FLAGS) -o a.out test.c -L. $(TEST_LIB).a $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) -lm
-	./a.out
+	$(CC) $(FLAGS) -o a.out test.c -L. $(LIB) $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) -lm
 
-clean:
-	rm -f *.a *.o *.so *.out $(TESTFILE) *.info *.gcno *.gcda
-	rm -rf report
-	rm -rf .clang-format
 
 gcov_report:
-	$(CC) $(D_OS) -c $(FLAGS) $(GCOV_FLAG) $(TEST_LIB).c -o $(TEST_LIB).a
-	$(CC) $(FLAGS) $(GCOV_FLAG) $(TEST_LIB).a $(TESTFILE).c $(LIBS_FOR_CHECK_PCKG) -o a2.out
-	./a2.out
-	@echo "=== gcov start ==="
+	$(CC) $(FLAGS) $(GCOV_FLAG)  $(TESTFILE).c  $(LIBS_FOR_CHECK_PCKG) -o a2.out
 	gcov a2.out
 	lcov -o test.info -c -d .
 	genhtml -o report test.info
 
-s21_math.a: remove_s21_math.a
-	@echo "=== s21_math compile ==="
-	$(CC) $(D_OS) -c $(FLAGS) $(TEST_LIB).c -o $(TEST_LIB).a
+s21_math.a:
+	$(CC) $(D_OS) -c $(FLAGS) $(LIB_DIR)
+	ar -rcs $(LIB) *.o
+	rm -rf *.o
 
-remove_s21_math.a:
+
+
+clean:
+	rm -f *.a *.o *.so *.out $(TESTFILE) *.info *.gcno *.gcda
 	rm -f *$(TEST_LIB)*.a *$(TEST_LIB)*.o
+	rm -rf report
+	rm -rf .clang-format
 
 
-leaks:
-	CK_FORK=no leaks --atExit -- ./a.out
+
