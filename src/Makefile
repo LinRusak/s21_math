@@ -29,14 +29,16 @@ format:
 	clang-format -i *.c *.h
 
 test: s21_math.a
-	$(CC) $(FLAGS) -o a.out test.c -L. $(LIB) $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) -lm
+	$(CC) $(FLAGS) -o a.out test.c -L. $(LIB) $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
 
 
 gcov_report:
-	$(CC) $(FLAGS) $(GCOV_FLAG)  $(TESTFILE).c  $(LIBS_FOR_CHECK_PCKG) -o a2.out
-	gcov a2.out
-	lcov -o test.info -c -d .
-	genhtml -o report test.info
+	$(CC) $(FLAGS) -o test-funct test.c $(LIB_DIR)   $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
+
+	./test-funct
+	lcov -t "test-funct" -o test-funct.info -c -d .
+	rm -rf
+	genhtml -o report test-funct.info
 
 s21_math.a:
 	$(CC) $(D_OS) -c $(FLAGS) $(LIB_DIR)
@@ -50,6 +52,7 @@ clean:
 	rm -f *$(TEST_LIB)*.a *$(TEST_LIB)*.o
 	rm -rf report
 	rm -rf .clang-format
+	rm -rf test-funct
 
 
 
