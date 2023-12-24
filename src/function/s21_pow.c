@@ -5,12 +5,12 @@ long double s21_pow(double base, double exp){
   double long res = 1;
   if(exp != exp){
       res = exp;
-  }else if(exp >= S21_LLONG_MAX && s21_fabs(base - 0.0) < EPS_6){
-    res = 0;
-  }else if(exp <= S21_LLONG_MIN && base > 0.0){
+  }else if(exp >= S21_LLONG_MAX && s21_fabs(base) < EPS_6){
     res = 0;
   }else if((exp <= S21_LLONG_MIN || exp >= S21_LLONG_MAX) && s21_fabs(base) == 1){
     res = 1;
+  }else if(exp <= S21_LLONG_MIN && base > 0.0){
+    res = 0;
   }
   else if((base>= S21_LLONG_MAX || base <= S21_LLONG_MIN) && exp < 0){
     res = 0;
