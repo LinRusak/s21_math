@@ -93,6 +93,12 @@ START_TEST(tan_test3) {
   ck_assert_str_eq(str1, str2);
 }
 
+START_TEST(tan_test4) {
+  ck_assert_double_nan(s21_tan(NAN));
+  ck_assert_double_nan(tan(NAN));
+}
+END_TEST
+
 START_TEST(floor_test) {
   long double x1 = s21_floor((double)_i * S21_M_PI);
   long double x2 = floor((double)_i * S21_M_PI);
@@ -152,6 +158,7 @@ START_TEST(exp_test) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
+
 START_TEST(exp_test2) {
   char str1[1000], str2[1000];
   snprintf(str1, sizeof(str1), "%.6Lf", s21_exp((double)_i));
@@ -182,6 +189,12 @@ START_TEST(ceil_test2) {
 }
 END_TEST;
 
+START_TEST(ceil_test3) {
+  ck_assert_double_nan(s21_ceil(NAN));
+  ck_assert_double_nan(ceil(NAN));
+}
+END_TEST
+
 START_TEST(abs_test) {
   long double x1 = s21_abs(_i);
   long double x2 = abs(_i);
@@ -204,6 +217,12 @@ START_TEST(acos_test2) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
+
+START_TEST(acos_test3) {
+  ck_assert_double_nan(s21_acos(NAN));
+  ck_assert_double_nan(acos(NAN));
+}
+END_TEST
 
 START_TEST(asin_test) {
   char str1[1000], str2[1000];
@@ -267,6 +286,7 @@ int main() {
   tcase_add_loop_test(tc1_1, tan_test, -n, n);
   tcase_add_loop_test(tc1_1, tan_test2, -n, n);
   tcase_add_loop_test(tc1_1, tan_test3, 0, 2);
+  tcase_add_loop_test(tc1_1, tan_test4, 1, 3);
 
   tcase_add_loop_test(tc1_1, floor_test, -n, n);
   tcase_add_loop_test(tc1_1, floor_test2, -n, n);
@@ -285,6 +305,7 @@ int main() {
 
   tcase_add_loop_test(tc1_1, ceil_test, -n, n);
   tcase_add_loop_test(tc1_1, ceil_test2, -n, n);
+  tcase_add_loop_test(tc1_1, ceil_test3, 0, 1);
 
   tcase_add_loop_test(tc1_1, asin_test, -n, n);
   tcase_add_loop_test(tc1_1, asin_test2, -2, 2);
@@ -292,6 +313,7 @@ int main() {
 
   tcase_add_loop_test(tc1_1, acos_test, -n, n);
   tcase_add_loop_test(tc1_1, acos_test2, -2, 2);
+  tcase_add_loop_test(tc1_1, acos_test3, 0, 1);
 
   tcase_add_loop_test(tc1_1, atan_test, -n, n);
   tcase_add_loop_test(tc1_1, atan_test1, 0, 5);
