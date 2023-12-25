@@ -16,7 +16,7 @@ else
 	D_OS = -D __My_APPLE__
 endif
 
-all: clean s21_math.a gcov_report
+all: test s21_math.a gcov_report
 
 
 clang:
@@ -31,7 +31,6 @@ format:
 test: s21_math.a
 	$(CC) $(FLAGS) -o a.out test.c -L. $(LIB) $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
 
-
 gcov_report:
 	$(CC) $(FLAGS) -o test-funct test.c $(LIB_DIR)   $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
 
@@ -39,13 +38,12 @@ gcov_report:
 	lcov -t "test-funct" -o test-funct.info -c -d .
 	rm -rf
 	genhtml -o report test-funct.info
+	rm -rf *.gcda *.gcno
 
 s21_math.a:
 	$(CC) $(D_OS) -c $(FLAGS) $(LIB_DIR)
 	ar -rcs $(LIB) *.o
 	rm -rf *.o
-
-
 
 clean:
 	rm -f *.a *.o *.so *.out $(TESTFILE) *.info *.gcno *.gcda

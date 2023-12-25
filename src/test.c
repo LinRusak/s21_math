@@ -5,8 +5,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-static const double exp_test_value[] = {S21_NAN, S21_INF, -S21_INF, -S21_INF, S21_INF, -S21_INF, 1};
-static const double base_test_value[] = {0, 0, 1, 1, 1, -1, S21_INF}; 
+static const double exp_test_value[] = {S21_NAN, S21_INF,  -S21_INF, -S21_INF,
+                                        S21_INF, -S21_INF, 1};
+static const double base_test_value[] = {0, 0, 1, 1, 1, -1, S21_INF};
 static const double tan_test_value[] = {S21_M_PI / 6.0, S21_M_PI / 4.0};
 
 START_TEST(pow_test) {
@@ -17,8 +18,6 @@ START_TEST(pow_test) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
-
-
 
 START_TEST(pow_test2) {
   char str1[1000], str2[1000];
@@ -31,14 +30,14 @@ END_TEST;
 
 START_TEST(pow_test3) {
   char str1[1000], str2[1000];
-  snprintf(str1, sizeof(str1), "%.6Lf", s21_pow(base_test_value[_i], exp_test_value[_i]));
+  snprintf(str1, sizeof(str1), "%.6Lf",
+           s21_pow(base_test_value[_i], exp_test_value[_i]));
 
-  snprintf(str2, sizeof(str2), "%.6f", pow(base_test_value[_i], exp_test_value[_i]));
+  snprintf(str2, sizeof(str2), "%.6f",
+           pow(base_test_value[_i], exp_test_value[_i]));
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
-
-
 
 START_TEST(sin_test) {
   long double x1 = s21_sin((double)_i * 5.12);
@@ -94,7 +93,6 @@ START_TEST(tan_test3) {
   ck_assert_str_eq(str1, str2);
 }
 
-
 START_TEST(floor_test) {
   long double x1 = s21_floor((double)_i * S21_M_PI);
   long double x2 = floor((double)_i * S21_M_PI);
@@ -106,7 +104,6 @@ START_TEST(floor_test2) {
   long double x2 = floor((double)_i / 10000);
   ck_assert_ldouble_eq_tol(x1, x2, EPS_6);
 }
-
 
 // При 0 выдаёт бесконечность вместо -бесконечности в 3 тесте (который
 // закоменчен)
@@ -129,7 +126,6 @@ START_TEST(log_test3) {
   ck_assert_str_eq(str1, str2);
 }
 
-
 START_TEST(fmod_test) {
   char str1[1000], str2[1000];
   snprintf(str1, sizeof(str1), "%.6Lf",
@@ -148,7 +144,6 @@ START_TEST(fmod_test1) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
-
 
 START_TEST(exp_test) {
   char str1[1000], str2[1000];
@@ -172,8 +167,6 @@ START_TEST(fabs_test) {
 }
 END_TEST;
 
-
-
 START_TEST(ceil_test) {
   long double x1 = s21_ceil((double)_i * 0.589);
   long double x2 = ceil((double)_i * 0.589);
@@ -189,14 +182,12 @@ START_TEST(ceil_test2) {
 }
 END_TEST;
 
-
 START_TEST(abs_test) {
   long double x1 = s21_abs(_i);
   long double x2 = abs(_i);
   ck_assert_ldouble_eq_tol(x1, x2, EPS_6);
 }
 END_TEST;
-
 
 START_TEST(acos_test) {
   char str1[1000], str2[1000];
@@ -213,9 +204,6 @@ START_TEST(acos_test2) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
-
-
-
 
 START_TEST(asin_test) {
   char str1[1000], str2[1000];
@@ -241,7 +229,6 @@ START_TEST(asin_test3) {
 }
 END_TEST;
 
-
 START_TEST(atan_test) {
   char str1[1000], str2[1000];
   snprintf(str1, sizeof(str1), "%.6Lf", s21_atan((double)_i * 0.72));
@@ -257,8 +244,6 @@ START_TEST(atan_test1) {
   ck_assert_str_eq(str1, str2);
 }
 END_TEST;
-
-
 
 int main() {
   int n = 5;
@@ -310,7 +295,6 @@ int main() {
 
   tcase_add_loop_test(tc1_1, atan_test, -n, n);
   tcase_add_loop_test(tc1_1, atan_test1, 0, 5);
-
 
   tcase_add_loop_test(tc1_1, abs_test, -10, 10);
   tcase_add_loop_test(tc1_1, pow_test2, S21_M_PI, S21_M_PI + 10);
