@@ -1,13 +1,14 @@
-#include "../s21_math.h"
 #include <float.h>
+
+#include "../s21_math.h"
 
 long double s21_exp(double x) {
   long double res = 1;
   long double ex = 1;
   long double i = 1;
   int flag = 0;
-  
-  if(x <= S21_LLONG_MIN || x >= S21_LLONG_MAX){
+
+  if (x <= S21_LLONG_MIN || x >= S21_LLONG_MAX) {
     return -S21_NAN;
   }
 

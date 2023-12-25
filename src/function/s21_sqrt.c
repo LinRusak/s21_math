@@ -1,6 +1,5 @@
 #include "../s21_math.h"
 
-
 long double s21_sqrt(double x) {
   if (x != x) return S21_NAN;
   if (x < 0) return S21_NAN * -1;
