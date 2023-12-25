@@ -21,9 +21,10 @@ all: test s21_math.a gcov_report
 
 clang:
 	cp ../materials/linters/.clang-format .
+	cp ../materials/linters/.clang-format ./function/
 
 check:
-	clang-format -n *.c *.h
+	clang-format -n *.c *.h 
 
 format:
 	clang-format -i *.c *.h
@@ -50,6 +51,7 @@ clean:
 	rm -f *$(TEST_LIB)*.a *$(TEST_LIB)*.o
 	rm -rf report
 	rm -rf .clang-format
+	rm -rf function/.clang-format
 	rm -rf test-funct
 
 
