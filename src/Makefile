@@ -30,10 +30,10 @@ format:
 	clang-format -i *.c *.h
 
 test: s21_math.a
-	$(CC) $(FLAGS) -o a.out test.c -L. $(LIB) $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
+	$(CC) $(FLAGS) -o a.out s21_test.c -L. $(LIB) $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
 
 gcov_report:
-	$(CC) $(FLAGS) -o test-funct test.c $(LIB_DIR)   $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
+	$(CC) $(FLAGS) -o test-funct s21_test.c $(LIB_DIR)   $(LIBS_FOR_CHECK_PCKG) $(GCOV_FLAG) 
 
 	./test-funct
 	lcov -t "test-funct" -o test-funct.info -c -d .
